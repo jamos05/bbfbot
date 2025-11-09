@@ -11,7 +11,9 @@ import datetime
 
 import server_keys
 
-client = discord.Client()
+intents = discord.Intents.default()
+intents.message_content = True
+client = discord.Client(intents=intents)
 
 def Print(msg):
     msg = '{} {}'.format(datetime.datetime.now(), msg)
@@ -23,6 +25,9 @@ def GetNextChannels(channel):
 
     # Get all channels in this category
     channels = channel.category.channels
+    if channel not in channels:
+        Print('Channel not found: {}'.format(channel))
+        
     start = channels.index(channel) + 1
 
     # Add find the next channels (including optionals)
@@ -61,7 +66,7 @@ async def on_message(message):
     changed = False
     for channel in channels:
         # Skip if already in channel
-        if message.author.permissions_in(channel).read_messages:
+        if channel.permissions_for(message.author).read_messages:
             continue
 
         # Get user's permissions and add access
