@@ -1,0 +1,13 @@
+[Unit]
+Description=bbfbot
+# https://www.redhat.com/en/blog/systemd-automate-recovery
+StartLimitIntervalSec=30
+StartLimitBurst=2
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/jacksonj/bbfbot/bbfbot.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
